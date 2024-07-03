@@ -9,7 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -30,7 +30,7 @@ public class Base64ConversionUtility
 
   private final Logger myLogger = ConsoleLogger.getInstance();
 
-  @GET
+  @POST
   @Consumes( MediaType.APPLICATION_JSON )
   @Produces( MediaType.APPLICATION_JSON )
   @Path( PathStrings.Base64ConversionPaths.stringEncode )
@@ -39,6 +39,7 @@ public class Base64ConversionUtility
     if ( null != request.getDataToConvert() )
     {
       String response = service.encodeStringToBase64( request.getDataToConvert() );
+
       return Response.ok().entity( response ).build();
     }
     else
@@ -47,7 +48,7 @@ public class Base64ConversionUtility
     }
   }
 
-  @GET
+  @POST
   @Consumes( MediaType.APPLICATION_JSON )
   @Produces( MediaType.APPLICATION_JSON )
   @Path( PathStrings.Base64ConversionPaths.stringDecode )
@@ -64,7 +65,7 @@ public class Base64ConversionUtility
     }
   }
 
-  @GET
+  @POST
   @Consumes( MediaType.APPLICATION_JSON )
   @Produces( MediaType.APPLICATION_JSON )
   @Path( PathStrings.Base64ConversionPaths.urlEncode )
@@ -81,7 +82,7 @@ public class Base64ConversionUtility
     }
   }
 
-  @GET
+  @POST
   @Consumes( MediaType.APPLICATION_JSON )
   @Produces( MediaType.APPLICATION_JSON )
   @Path( PathStrings.Base64ConversionPaths.urlDecode )

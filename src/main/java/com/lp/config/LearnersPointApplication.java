@@ -19,6 +19,8 @@ import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
 import com.lp.controller.Base64ConversionUtility;
+import com.lp.controller.JAXBController;
+import com.lp.controller.XMLConversion;
 import com.lp.exception.GlobalExceptionMapper;
 import com.lp.exception.LearnersPointException;
 import com.lp.logger.ConsoleLogger;
@@ -42,6 +44,8 @@ public class LearnersPointApplication extends Application
   {
     final Set<Object> classes = new HashSet<Object>();
     classes.add( new Base64ConversionUtility() );
+    classes.add( new XMLConversion() );
+    classes.add( new JAXBController() );
 
     final JacksonJaxbJsonProvider provider = getJacksonJaxbJsonProvider();
 
