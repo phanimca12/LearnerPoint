@@ -42,4 +42,21 @@ public class JAXBController
     }
   }
 
+  @POST
+  @Consumes( MediaType.APPLICATION_JSON )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.JAXBConversionPaths.JSON_TO_OBJECT )
+  public Response convertJSONToJavaObj( XMLConversionModel request ) throws Exception
+  {
+    if ( null != request.getRequestData() )
+    {
+      List<JaxbObjectModel> modelList = service.convertJSONToObject( request.getRequestData().toString() );
+      return Response.ok().entity( modelList ).build();
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
 }

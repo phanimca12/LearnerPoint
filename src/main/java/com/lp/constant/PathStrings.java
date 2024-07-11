@@ -25,6 +25,16 @@ public interface PathStrings
   public interface JAXBConversionPaths
   {
     public static final String XSD_TO_OBJECT = "/xsdtoobj";
+    public static final String JSON_TO_OBJECT = "/jsontoobj";
+  }
+
+  public interface PDFConversionPaths
+  {
+    public static final String WORD_TO_PDF = "/wordtopdf";
+    public static final String JPEG_TO_PDF = "/jpegtopdf";
+    public static final String HTML_TO_PDF = "/htmltopdf";
+    public static final String EXCEL_TO_PDF = "/exceltopdf";
+    public static final String PP_TO_PDF    = "/pptopdf";
 
   }
 }

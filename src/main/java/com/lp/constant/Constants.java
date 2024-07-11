@@ -14,4 +14,8 @@ public class Constants
   public static final String BAD_REQUEST_MSG       = "BAD_REQUEST_MSG";
   public static final String INTERNAL_ERROR_MSG    = "INTERNAL_ERROR_MSG";
   public static final String RESPONSE_GENERATION_ERROR_MSG = "RES_GENERATION_ERROR_MSG";
+
+  public static final String APPLICATION_PDF               = "application/pdf";
+  public static final String APPLICATION_DOCX              = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  public static final String TEXT_PLAIN                    = "text/plain";
 }

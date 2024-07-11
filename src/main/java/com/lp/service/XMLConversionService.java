@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -16,6 +17,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,6 +34,14 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.jsonschema2pojo.DefaultGenerationConfig;
+import org.jsonschema2pojo.GenerationConfig;
+import org.jsonschema2pojo.GsonAnnotator;
+import org.jsonschema2pojo.SchemaGenerator;
+import org.jsonschema2pojo.SchemaMapper;
+import org.jsonschema2pojo.SchemaStore;
+import org.jsonschema2pojo.SourceType;
+import org.jsonschema2pojo.rules.RuleFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.wiztools.xsdgen.ParseException;
@@ -38,14 +49,17 @@ import org.wiztools.xsdgen.XsdGen;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.lp.logger.ConsoleLogger;
 import com.lp.model.JaxbObjectModel;
+import com.sun.codemodel.JCodeModel;
 
 public class XMLConversionService implements IXmlConversion
 {
-  String testData = "<library><book><title>Harry Potter</title><author>J.K. Rowling</author><price>29.99</price></book><book><title>The Hobbit</title><author>J.R.R. Tolkien</author><price>24.95</price></book></library>";
+  private static final Logger myLogger = ConsoleLogger.getInstance();
 
   @Override
   public String convertXMLToXSD( String input, String designType ) throws Exception
@@ -68,6 +82,7 @@ public class XMLConversionService implements IXmlConversion
       gen.parse( outputFile );
       gen.write( boas );
       outputFile.delete();
+      myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "getXmlSchema", "Fetching xml schema data" );
       return boas.toString( StandardCharsets.UTF_8 ).replace( "mixed=\"true\"", "" );
     }
   }
@@ -78,6 +93,8 @@ public class XMLConversionService implements IXmlConversion
 
     XmlMapper xmlMapper = new XmlMapper();
     JsonNode jsonNode = xmlMapper.readTree( input.getBytes() );
+
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertXMLToJSON", "Fetching JSON data" );
     return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( jsonNode );
   }
 
@@ -87,6 +104,8 @@ public class XMLConversionService implements IXmlConversion
     JsonNode jsonNode = new ObjectMapper().readTree( input );
     XmlMapper xmlMapper = new XmlMapper();
     xmlMapper.configure( ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
+
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertJSONToXML", "Fetching xml data" );
     return xmlMapper.writerWithDefaultPrettyPrinter().writeValueAsString( jsonNode );
   }
 
@@ -94,6 +113,8 @@ public class XMLConversionService implements IXmlConversion
   public String convertJSONToYAML( String input ) throws Exception
   {
     JsonNode jsonNode = new ObjectMapper().readTree( input );
+
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertJSONToYAML", "Fetching YAML data" );
     return new YAMLMapper().writerWithDefaultPrettyPrinter().writeValueAsString( jsonNode );
   }
 
@@ -101,6 +122,7 @@ public class XMLConversionService implements IXmlConversion
   public String convertYAMLTOJSON( String input ) throws Exception
   {
     JsonNode jsonNode = new YAMLMapper().readTree( input );
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertYAMLTOJSON", "Fetching JSON data" );
     return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString( jsonNode );
   }
 
@@ -108,6 +130,7 @@ public class XMLConversionService implements IXmlConversion
   public String convertCSVToJSON( InputStream is ) throws Exception
   {
     CSVParser csvParser = new CSVParser( new InputStreamReader( is ), CSVFormat.DEFAULT.withFirstRecordAsHeader() );
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertCSVToJSON", "Fetching JSON data" );
     return convertCsvToJson( csvParser.getRecords() );
   }
 
@@ -180,16 +203,10 @@ public class XMLConversionService implements IXmlConversion
   public List<JaxbObjectModel> convertXsdToObject( String xsd ) throws IOException, InterruptedException
   {
     List<JaxbObjectModel> modelList = null;
-    File tempFile = File.createTempFile( "temp", ".xsd" );
-    FileWriter writer = new FileWriter( tempFile );
-    writer.write( xsd );
-    writer.close();
-
+    File tempFile = createFile( "temp", ".xsd", xsd );
     ProcessBuilder processBuilder = new ProcessBuilder( "xjc", tempFile.getAbsolutePath() );
     processBuilder.redirectErrorStream( true ); // Redirect error stream to output stream
-
     Process process = processBuilder.start();
-
     int exitCode = process.waitFor();
     if ( exitCode == 0 )
     {
@@ -198,6 +215,8 @@ public class XMLConversionService implements IXmlConversion
       modelList = readJavaObjects( folderPath );
       cleanUPDir( folderPath );
     }
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertXsdToObject",
+                   "Fetching Java classes data" );
     return modelList;
   }
 
@@ -224,7 +243,6 @@ public class XMLConversionService implements IXmlConversion
               {
                 builder.append( line ).append( "\n" );
               }
-              System.out.println( builder.toString() );
               model.setObjectDescription( builder.toString() );
               reader.close();
             }
@@ -247,6 +265,65 @@ public class XMLConversionService implements IXmlConversion
          .sorted( Comparator.reverseOrder() ) // Reverse order for deleting innermost files first
          .map( Path::toFile )
          .forEach( File::delete );
+  }
+
+  @Override
+  public List<JaxbObjectModel> convertJSONToObject( String jsonData ) throws Exception
+  {
+    List<JaxbObjectModel> modelList = null;
+    // TODO Auto-generated method stub
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.enable( SerializationFeature.INDENT_OUTPUT ); // Enable indentation
+    Object json = objectMapper.readValue( jsonData, Object.class );
+    String beautifiedJson = objectMapper.writeValueAsString( json );
+    File tempFile = createFile( "temp", ".json", beautifiedJson );
+    String folderPath = processJsonToObject( tempFile.getAbsolutePath() );
+    tempFile.delete();
+    modelList = readJavaObjects( folderPath );
+    cleanUPDir( folderPath );
+
+    myLogger.logp( Level.INFO, XMLConversionService.class.getName(), "convertJSONToObject",
+                   "Fetching Java classes data" );
+    return modelList;
+  }
+
+  private File createFile( String name, String type, String data ) throws IOException
+  {
+    File tempFile = File.createTempFile( name, type );
+    FileWriter writer = new FileWriter( tempFile );
+    writer.write( data );
+    writer.close();
+    return tempFile;
+  }
+
+  private String processJsonToObject( String path ) throws IOException
+  {
+    JCodeModel codeModel = new JCodeModel();
+    String filePath = "file:///" + path;
+    URL source = new URL( filePath );
+    GenerationConfig config = new DefaultGenerationConfig()
+    {
+      @Override
+      public boolean isGenerateBuilders()
+      {
+        return true;
+      }
+
+      @Override
+      public SourceType getSourceType()
+      {
+        return SourceType.JSON;
+      }
+    };
+    SchemaMapper mapper = new SchemaMapper( new RuleFactory( config, new GsonAnnotator( config ), new SchemaStore() ),
+                                            new SchemaGenerator() );
+    mapper.generate( codeModel, "ClassName", "com", source );
+    File outDir = new File( "JsonDir" );
+    if ( !outDir.exists() )
+      outDir.mkdirs();
+
+    codeModel.build( outDir );
+    return outDir.getAbsolutePath() + "/" + "com";
 
   }
 }

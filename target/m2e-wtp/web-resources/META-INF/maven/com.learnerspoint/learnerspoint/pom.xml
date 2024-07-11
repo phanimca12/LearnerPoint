@@ -1,77 +1,118 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.learnerspoint</groupId>
-  <artifactId>learnerspoint</artifactId>
-  <packaging>war</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>learnerspoint Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  
-  <properties>
-  <pdfbox.version>2.0.24</pdfbox.version>
-  <java.version>1.8</java.version>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.learnerspoint</groupId>
+	<artifactId>learnerspoint</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>learnerspoint Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<pdfbox.version>2.0.24</pdfbox.version>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-  
-  <dependencies>
-  <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-csv</artifactId>
-        <version>1.9.0</version> <!-- Replace with the latest version -->
-    </dependency>
-    
-   <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-yaml</artifactId>
-        <version>2.13.1</version> <!-- Replace with the latest version -->
-    </dependency>
-    
-     <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-        <artifactId>jackson-dataformat-xml</artifactId>
-        <version>2.13.1</version> <!-- Replace with the latest version -->
-    </dependency>
+	</properties>
 
-    <!-- Jackson Databind for JSON processing -->
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.13.1</version> <!-- Replace with the latest version -->
-    </dependency>
-    
-  <dependency>
-        <groupId>org.apache.ws.commons.schema</groupId>
-        <artifactId>XmlSchema</artifactId>
-        <version>1.4.7</version>
-    </dependency>
-<dependency>
-    <groupId>org.wiztools</groupId>
-    <artifactId>xsd-gen</artifactId>
-    <version>0.2.1</version>
-</dependency>
-  <dependency>
+	<dependencies>
+		<!-- Apache POI for handling DOC and DOCX files -->
+
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-words</artifactId>
+			<version>18.7</version>
+			<classifier>jdk16</classifier>
+		</dependency>
+		<dependency>
 			<groupId>com.aspose</groupId>
 			<artifactId>aspose-pdf</artifactId>
 			<version>18.7</version>
 		</dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-    <groupId>org.apache.pdfbox</groupId>
-    <artifactId>pdfbox</artifactId>
-    <version>${pdfbox.version}</version>
-</dependency>
-<dependency>
+
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-cells</artifactId>
+			<version>22.6</version> <!-- Replace with the latest version -->
+			<scope>compile</scope>
+		</dependency>
+
+		  <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-slides</artifactId>
+            <version>24.6</version>
+            <classifier>jdk16</classifier>
+        </dependency>
+
+		<dependency>
+			<groupId>org.jsonschema2pojo</groupId>
+			<artifactId>jsonschema2pojo-core</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.9.0</version> <!-- Replace with the latest version -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<version>2.13.1</version> <!-- Replace with the latest version -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.13.1</version> <!-- Replace with the latest version -->
+		</dependency>
+
+		<!-- Jackson Databind for JSON processing -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.1</version> <!-- Replace with the latest version -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.ws.commons.schema</groupId>
+			<artifactId>XmlSchema</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wiztools</groupId>
+			<artifactId>xsd-gen</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
 			<version>1.9.13</version>
@@ -143,17 +184,8 @@
 			<artifactId>jsr311-api</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-words</artifactId>
-			<version>18.7</version>
-			<classifier>jdk16</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-pdf</artifactId>
-			<version>18.7</version>
-		</dependency>
+
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -167,7 +199,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>2.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jmockit</groupId>
@@ -198,25 +230,39 @@
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Snowbound -->
-        <dependency>
-            <groupId>snowbound</groupId>
-            <artifactId>SnowBound</artifactId>
-            <version>14.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>snowbound</groupId>
-            <artifactId>SnowboundLicense</artifactId>
-            <version>14.1.0</version>
-        </dependency>
-        <dependency>
-    		<groupId>snowbound-office</groupId>
-    		<artifactId>itext-licensekey</artifactId>
-    		<version>3.0.1</version>
+		<dependency>
+			<groupId>snowbound</groupId>
+			<artifactId>SnowBound</artifactId>
+			<version>14.1.0</version>
 		</dependency>
-  </dependencies>
-  <build>
-    <finalName>learnerspoint</finalName>
-  </build>
+		<dependency>
+			<groupId>snowbound</groupId>
+			<artifactId>SnowboundLicense</artifactId>
+			<version>14.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>snowbound-office</groupId>
+			<artifactId>itext-licensekey</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>learnerspoint</finalName>
+	</build>
+	<repositories>
+
+		<repository>
+
+			<id>AsposeJavaAPI</id>
+
+			<name>Aspose Java API</name>
+
+			<url>https://releases.aspose.com/java/repo/</url>
+
+		</repository>
+
+	</repositories>
+
 </project>

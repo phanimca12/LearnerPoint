@@ -20,6 +20,7 @@ import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
 import com.lp.controller.Base64ConversionUtility;
 import com.lp.controller.JAXBController;
+import com.lp.controller.PDFConversion;
 import com.lp.controller.XMLConversion;
 import com.lp.exception.GlobalExceptionMapper;
 import com.lp.exception.LearnersPointException;
@@ -46,6 +47,7 @@ public class LearnersPointApplication extends Application
     classes.add( new Base64ConversionUtility() );
     classes.add( new XMLConversion() );
     classes.add( new JAXBController() );
+    classes.add( new PDFConversion() );
 
     final JacksonJaxbJsonProvider provider = getJacksonJaxbJsonProvider();
 

@@ -22,4 +22,7 @@ public interface IXmlConversion
   public String convertCSVToXML( InputStream is ) throws Exception;
 
   public List<JaxbObjectModel> convertXsdToObject( String xsd ) throws Exception;
+
+  public List<JaxbObjectModel> convertJSONToObject( String json ) throws Exception;
+
 }
