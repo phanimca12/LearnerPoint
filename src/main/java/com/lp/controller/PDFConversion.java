@@ -31,6 +31,7 @@ import com.lp.exception.LearnersPointException;
 import com.lp.logger.ConsoleLogger;
 import com.lp.service.IPDFConversion;
 import com.lp.service.PDFConversionService;
+import com.lp.service.XMLConversionService;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -70,7 +71,6 @@ public class PDFConversion
       throw new LearnersPointException( INPUT_MISSING );
     }
   }
-
 
   @POST
   @Consumes( MediaType.MULTIPART_FORM_DATA )
@@ -183,6 +183,164 @@ public class PDFConversion
       {
         return buildStreamResponse( pdfConversion.convertPPToPDF( fileParts.get( 0 ).getEntityAs( InputStream.class ) ),
                                     Constants.APPLICATION_PDF );
+      }
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
+  @POST
+  @Consumes( MediaType.MULTIPART_FORM_DATA )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.PDFConversionPaths.PDF_TO_WORD )
+  public Response convertPDTToWORD( @FormDataParam( "files" ) List<FormDataBodyPart> fileParts ) throws Exception
+  {
+    java.nio.file.Path sourceFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_process"
+        + FileUtil.getCurrentDateTime() );
+    java.nio.file.Path zipFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_converted.zip"
+        + FileUtil.getCurrentDateTime() );
+    loadLicense();
+    if ( null != fileParts )
+    {
+      if ( fileParts.size() > 1 )
+      {
+        return processRequest( fileParts, sourceFolderPath, zipFolderPath, ".docx", "convertPDFToWord" );
+      }
+      else
+      {
+        return buildStreamResponse( pdfConversion.convertPDFToWord( fileParts.get( 0 )
+                                                                             .getEntityAs( InputStream.class ) ),
+                                    Constants.APPLICATION_DOCX );
+      }
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
+  @POST
+  @Consumes( MediaType.MULTIPART_FORM_DATA )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.PDFConversionPaths.PDF_TO_JPG )
+  public Response convertPDTToJPG( @FormDataParam( "files" ) List<FormDataBodyPart> fileParts ) throws Exception
+  {
+    java.nio.file.Path sourceFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_process"
+        + FileUtil.getCurrentDateTime() );
+    java.nio.file.Path zipFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_converted.zip"
+        + FileUtil.getCurrentDateTime() );
+    loadLicense();
+    if ( null != fileParts )
+    {
+      if ( fileParts.size() > 1 )
+      {
+        return processRequest( fileParts, sourceFolderPath, zipFolderPath, ".jpg", "convertPDFToJPG" );
+      }
+      else
+      {
+        return buildStreamResponse( pdfConversion.convertPDFToJPG( fileParts.get( 0 )
+                                                                            .getEntityAs( InputStream.class ) ),
+                                    Constants.JPG );
+      }
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
+  @POST
+  @Consumes( MediaType.MULTIPART_FORM_DATA )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.PDFConversionPaths.PDF_TO_PPT )
+  public Response convertPDTToPPT( @FormDataParam( "files" ) List<FormDataBodyPart> fileParts ) throws Exception
+  {
+    java.nio.file.Path sourceFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_process"
+        + FileUtil.getCurrentDateTime() );
+    java.nio.file.Path zipFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_converted.zip"
+        + FileUtil.getCurrentDateTime() );
+    loadLicense();
+    if ( null != fileParts )
+    {
+      if ( fileParts.size() > 1 )
+      {
+        return processRequest( fileParts, sourceFolderPath, zipFolderPath, ".pptx", "convertPDFToPPT" );
+      }
+      else
+      {
+        return buildStreamResponse( pdfConversion.convertPDFToPPT( fileParts.get( 0 )
+                                                                            .getEntityAs( InputStream.class ) ),
+                                    Constants.PPTX );
+      }
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
+  @POST
+  @Consumes( MediaType.MULTIPART_FORM_DATA )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.PDFConversionPaths.PDF_TO_EXCEL )
+  public Response convertPDTToExcel( @FormDataParam( "files" ) List<FormDataBodyPart> fileParts ) throws Exception
+  {
+    java.nio.file.Path sourceFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_process"
+        + FileUtil.getCurrentDateTime() );
+    java.nio.file.Path zipFolderPath = Paths.get( "C:\\phani_awd\\Images\\learnerspoint_converted.zip"
+        + FileUtil.getCurrentDateTime() );
+    loadLicense();
+    if ( null != fileParts )
+    {
+      if ( fileParts.size() > 1 )
+      {
+        return processRequest( fileParts, sourceFolderPath, zipFolderPath, ".xlsx", "convertPDFToExcel" );
+      }
+      else
+      {
+        return buildStreamResponse( pdfConversion.convertPDFToExcel( fileParts.get( 0 )
+                                                                              .getEntityAs( InputStream.class ) ),
+                                    Constants.XLSX );
+      }
+    }
+    else
+    {
+      throw new LearnersPointException( INPUT_MISSING );
+    }
+  }
+
+  @POST
+  @Consumes( MediaType.MULTIPART_FORM_DATA )
+  @Produces( MediaType.APPLICATION_JSON )
+  @Path( PathStrings.PDFConversionPaths.MERGEPDF )
+  public Response mergePDF( @FormDataParam( "files" ) List<FormDataBodyPart> fileParts ) throws Exception
+  {
+    loadLicense();
+    if ( null != fileParts )
+    {
+      try ( ByteArrayOutputStream outputStream = new ByteArrayOutputStream() )
+      {
+        com.aspose.pdf.Document mergedDocument = new com.aspose.pdf.Document();
+
+        fileParts.forEach( file ->
+        {
+          InputStream is = file.getEntityAs( InputStream.class );
+          try
+          {
+            pdfConversion.mergePDF( mergedDocument, is );
+          }
+          catch ( Exception e )
+          {
+            // TODO Auto-generated catch block
+            myLogger.logp( Level.SEVERE, XMLConversionService.class.getName(), "mergePDF", "Merging PDS" );
+          }
+
+        } );
+
+        mergedDocument.save( outputStream );
+        return buildStreamResponse( outputStream, Constants.APPLICATION_PDF );
       }
     }
     else

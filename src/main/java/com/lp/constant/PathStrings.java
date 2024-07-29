@@ -35,6 +35,11 @@ public interface PathStrings
     public static final String HTML_TO_PDF = "/htmltopdf";
     public static final String EXCEL_TO_PDF = "/exceltopdf";
     public static final String PP_TO_PDF    = "/pptopdf";
+    public static final String PDF_TO_WORD  = "/pdftoword";
+    public static final String PDF_TO_JPG   = "/pdftojpg";
+    public static final String PDF_TO_PPT   = "/pdftoppt";
+    public static final String PDF_TO_EXCEL = "/pdftoexcel";
+    public static final String MERGEPDF     = "/mergepdf";
 
   }
 }

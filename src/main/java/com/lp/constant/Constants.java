@@ -18,4 +18,8 @@ public class Constants
   public static final String APPLICATION_PDF               = "application/pdf";
   public static final String APPLICATION_DOCX              = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
   public static final String TEXT_PLAIN                    = "text/plain";
+  public static final String JPG                           = "image/jpeg";
+  public static final String PPTX                          = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+  public static final String PPT                           = "application/vnd.ms-powerpoint";
+  public static final String XLSX                          = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 }
